@@ -5,8 +5,12 @@ body {
     padding: 0;
 }
 
-.bg-green-1 {
+.bg-green-main {
     background-color: #58B368;
+}
+
+.text-green-main {
+    color: #58B368;
 }
 
 .highlight {
