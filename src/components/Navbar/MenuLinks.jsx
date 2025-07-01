@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const MenuLinks = ({ loggedIn, setShowMenu }) => {
     return (
         <>
-            <li><Link to="/explore" className="highlight" onClick={() => setShowMenu(false)}> Explore </Link></li>
+            <li><Link to="/search" className="highlight" onClick={() => setShowMenu(false)}> Explore </Link></li>
             <li><Link to="/favorites" className="highlight" onClick={() => setShowMenu(false)}> Favorites </Link></li>
             {!loggedIn &&
                 <>

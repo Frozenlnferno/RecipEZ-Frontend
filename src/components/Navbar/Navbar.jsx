@@ -7,11 +7,11 @@ const Navbar = ({ loggedIn }) => {
     const [showMenu, setShowMenu] = useState(false);
 
     return (
-        <nav className="fixed top-0 left-0 bg-green-main w-full z-50 shadow-md">
+        <nav className="fixed top-0 left-0 bg-primary w-full z-50 shadow-md">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <Link to="/" 
+                    <Link to="/landing" 
                         className="flex items-center space-x-2 text-2xl font-bold text-white"
                         onClick={() => setShowMenu(false)}> 
                             <img src={logo} className="logo" style={{ height: '40px', width: 'auto' }}/>

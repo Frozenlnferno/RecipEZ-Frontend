@@ -18,7 +18,7 @@ const Login = () => {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center flex-col bg-gray-100">
+        <div className="flex min-h-screen items-center justify-center flex-col bg-orange-50">
             <form
                 onSubmit={handleSubmit}
                 className="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm"
@@ -70,7 +70,7 @@ const Login = () => {
                     </label>
                     <input
                         type="password"
-                        className="w-full px-4 py-2 border-gray-600 border-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+                        className="w-full px-4 py-2 border-gray-600 border-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
@@ -80,7 +80,7 @@ const Login = () => {
 
                 <button
                     type="submit"
-                    className="w-full bg-[#58B368] hover:bg-[#396441] text-white font-semibold py-2 rounded-lg transition duration-200"
+                    className="w-full bg-primary text-white font-semibold py-2 rounded-lg transition duration-200"
                 >
                     Login
                 </button>

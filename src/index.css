@@ -5,11 +5,23 @@ body {
     padding: 0;
 }
 
-.bg-green-main {
-    background-color: #58B368;
+.bg-main {
+  background-color: #fdf6ec;
 }
 
-.text-green-main {
+.bg-primary {
+    background-color: #3c5d48;
+}
+
+.bg-secondary {
+    background-color: #5a7f6b;
+}
+
+.bg-accent {
+    background-color: #d1a37c;
+}
+
+.text-primary {
     color: #58B368;
 }
 
@@ -18,5 +30,5 @@ body {
 }
 
 .highlight:hover {
-  color: #396441;
+  color: #5a7f6b;
 }

@@ -86,7 +86,7 @@ const SignUp = () => {
                     </label>
                     <input
                         type="password"
-                        className="w-full px-4 py-2 border-gray-600 border-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-400"
+                        className="w-full px-4 py-2 border-gray-600 border-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
