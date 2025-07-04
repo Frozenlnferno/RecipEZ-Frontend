@@ -3,7 +3,7 @@ import Navbar from "../../components/Navbar/Navbar.jsx";
 
 const LandingPage = () => {
     return (
-        <>
+        <> 
             <Navbar />
             <div className="pt-16 bg-orange-50 flex flex-col">
                 {/* Hero Section */}
