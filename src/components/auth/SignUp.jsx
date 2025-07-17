@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const SignUp = () => {
+const SignUp = ({ handleSignUp }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -12,6 +12,12 @@ const SignUp = () => {
         // Handle login logic here
         console.log('Email:', email);
         console.log('Password:', password);
+        
+        handleSignUp({ 
+            email,
+            name,
+            password
+        })
     };
 
     const closeError = () => {

@@ -1,9 +1,12 @@
+import { useState } from 'react';
+ 
 const SearchBar = ({ onSearch, onFilterClick }) => {
+    const [searchQuery, setSearchQuery] = useState("");
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-        const query = e.target.search.value.trim();
-        if (query) {
-        onSearch(query);
+        if (searchQuery.trim() !== "") {
+            console.log(searchQuery);
         }
     };
 
@@ -25,10 +28,10 @@ const SearchBar = ({ onSearch, onFilterClick }) => {
                 />
                 </svg>
                 <input
-                    type="text"
-                    name="search"
+                    type="search"
                     placeholder="Search recipes..."
                     autoComplete="off"
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     className="bg-transparent focus:outline-none w-full"
                 />
             </div>

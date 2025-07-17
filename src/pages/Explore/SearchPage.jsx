@@ -1,10 +1,32 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 import Navbar from "../../components/Navbar/Navbar.jsx";
 import SearchBar from "../../components/Explore/SearchBar.jsx";
-import RecipeSection from "../../components/Explore/RecipeSection.jsx";
+import RecipeSection from "../../components/Recipe/RecipeSection.jsx";
 
 const SearchPage = () => {
+    const [popular, setPopular] = useState([]);
+    const [popularIsLoading, setPopularIsLoading] = useState(true)
+    const [popularError, setPopularError] = useState(null);
+    
+    useEffect(() => {
+        const getPopular = async () => {
+            try {
+                const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
+                if (!response.ok) {throw new Error("Failed to fetch from API")}
+                const data = await response.json();
+                console.log(data);
+                setPopular(data);
+            } catch (err) {
+                setPopularError(`Failed to get popular recipes. Error: ${err}`);
+            } finally {
+                setPopularIsLoading(false);
+            }
+        }
+        getPopular();
+    }, [])
+
     return (
         <>
             <Navbar />
@@ -21,13 +43,16 @@ const SearchPage = () => {
                 </div>
                 <div className="flex flex-col p-10 gap-y-8 w-full">
                     <div className="">
-                        <RecipeSection 
-                            title="Popular"
-                            recipeList={[
-                                { title:"Recipe Title", image:"https://th.bing.com/th/id/OSK.68db220ac32c2be712de2b397ad4fc46?w=197&h=118&c=7&rs=2&qlt=80&o=6&cdv=1&dpr=1.5&pid=16.1" },
-                                { title:"Recipe Title", image:"https://th.bing.com/th/id/OSK.68db220ac32c2be712de2b397ad4fc46?w=197&h=118&c=7&rs=2&qlt=80&o=6&cdv=1&dpr=1.5&pid=16.1" }
-                            ]} 
-                        />
+                        {popularIsLoading ?
+                            "Loading popular recipes":
+                            popularError ?
+                                popularError :
+                                <RecipeSection 
+                                    title="Popular"
+                                    recipeList={popular.recipes}
+                                    seeAllAddress="/popular" 
+                                />
+                        }
                     </div>
                     <div className="">
                         <RecipeSection 
@@ -36,6 +61,7 @@ const SearchPage = () => {
                                 { title:"Recipe Title", image:"https://th.bing.com/th/id/OSK.68db220ac32c2be712de2b397ad4fc46?w=197&h=118&c=7&rs=2&qlt=80&o=6&cdv=1&dpr=1.5&pid=16.1" },
                                 { title:"Recipe Title", image:"https://th.bing.com/th/id/OSK.68db220ac32c2be712de2b397ad4fc46?w=197&h=118&c=7&rs=2&qlt=80&o=6&cdv=1&dpr=1.5&pid=16.1" }
                             ]} 
+                            seeAllAddress="/favorites"
                         />
                     </div>
                     <div className="">
@@ -45,6 +71,7 @@ const SearchPage = () => {
                                 { title:"Recipe Title", image:"https://th.bing.com/th/id/OSK.68db220ac32c2be712de2b397ad4fc46?w=197&h=118&c=7&rs=2&qlt=80&o=6&cdv=1&dpr=1.5&pid=16.1" },
                                 { title:"Recipe Title", image:"https://th.bing.com/th/id/OSK.68db220ac32c2be712de2b397ad4fc46?w=197&h=118&c=7&rs=2&qlt=80&o=6&cdv=1&dpr=1.5&pid=16.1" }
                             ]} 
+                            seeAllAddress="/recommended"
                         />
                     </div>
                 </div>
