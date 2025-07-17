@@ -1,27 +1,34 @@
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../../components/Navbar/Navbar.jsx';
 import SignUp from '../../components/auth/SignUp.jsx';
 
-const env = process.env;
+const env = import.meta.env;
 
 const SignUpPage = () => {
-    const handleSignUp = async ({ email, name, password }) => {
+    const navigate = useNavigate();
+    const handleSignUp = async (email, name, password, setError) => {
         try {
-            const response = await fetch(`${env.SERVER_ORIGIN}/auth/signin`, {
+            const res = await fetch(`${env.VITE_SERVER_ORIGIN}/auth/signup`, {
                 method: 'post',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    email: inputEmail,
-                    password: inputPassword
-                })
-            })
-            const data = await response.json();
+                body: JSON.stringify({ email, name, password })
+            });
 
-            if (!data.id) { throw new Error("Failed to sign up."); }
-
+            // Checks if new user is valid
+            const user = await res.json();
+            if (!user.id) {
+                setError("An account with this email already exists.");
+                return false;
+            }
+            
+            setError("");
+            navigate("/search");
+            return true;
         } catch (err) {
-            console.log(err);
+            setError("Server error. Please try again.");
+            console.log("Error: ", err);
+            return false;
         }
     }
 
