@@ -4,11 +4,22 @@ import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar.jsx";
 import SearchBar from "../../components/Explore/SearchBar.jsx";
 import RecipeSection from "../../components/Recipe/RecipeSection.jsx";
+import queryHelpers from "../../utils/queryHelpers.js";
 
 const SearchPage = () => {
+    const navigate = useNavigate();
+
     const [popular, setPopular] = useState([]);
-    const [popularIsLoading, setPopularIsLoading] = useState(true)
+    const [popularIsLoading, setPopularIsLoading] = useState(true);
     const [popularError, setPopularError] = useState(null);
+
+    const [filters, setFilters] = useState({
+        type: "",            // string or array for meal type
+        cuisine: [],         // array for multiple cuisines
+        diet: [],            // array for multiple diets
+        intolerances: [],    // array for intolerances
+        maxReadyTime: 0,     // number (minutes)
+    });
     
     useEffect(() => {
         const getPopular = async () => {
@@ -27,6 +38,12 @@ const SearchPage = () => {
         getPopular();
     }, [])
 
+    const handleSearch = (query) => {
+        const qs = queryHelpers.buildURL(query, filters);
+        console.log(query, " ", qs);
+        navigate(`/results?${qs}`);
+    }
+    
     return (
         <>
             <Navbar />
@@ -36,7 +53,7 @@ const SearchPage = () => {
                         Search for your next favorite recipe!
                     </h1>
                     <p> Use our AI assisted search to find your favorite recipes! </p>
-                    <SearchBar />
+                    <SearchBar handleSearch={handleSearch}/>
                 </div>
                 <div className="px-10 w-full">
                     <div className="rounded border-t border-1 border-gray-400 w-full"></div>

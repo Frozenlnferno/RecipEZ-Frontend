@@ -1,14 +1,19 @@
 import { useState } from 'react';
  
-const SearchBar = ({ onSearch, onFilterClick }) => {
+const SearchBar = ({ handleSearch }) => {
     const [searchQuery, setSearchQuery] = useState("");
     
     const handleSubmit = (e) => {
         e.preventDefault();
         if (searchQuery.trim() !== "") {
             console.log(searchQuery);
+            handleSearch(searchQuery);
         }
     };
+
+    const onFilterClick = () => {
+
+    }
 
     return (
         <form onSubmit={handleSubmit} className="w-full max-w-2xl flex flex-col sm:flex-row items-center gap-4 py-2 px-2 ">
