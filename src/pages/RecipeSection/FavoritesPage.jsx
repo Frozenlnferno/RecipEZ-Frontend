@@ -4,7 +4,7 @@ import Navbar from "../../components/Navbar/Navbar.jsx";
 import CardGrid from "../../components/Recipe/CardGrid.jsx";
 import Loading from "../../components/loading/Loading.jsx";
 
-const PopularPage = () => {
+const FavoritesPage = () => {
     const [recipeList, setRecipeList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -33,7 +33,7 @@ const PopularPage = () => {
             <div className="flex flex-col pt-16 w-full min-h-screen">
                 <header className="p-8 mb-4 bg-white shadow-lg flex flex-col items-center mx-auto  w-full">
                     <h1 className="font-extrabold text-3xl text-orange-700 mb-2 drop-shadow-sm text-center flex items-center gap-2">
-                        <span role="img" aria-label="fire">🔥</span> Popular Recipes
+                        <span role="img" aria-label="fire">⭐</span> Favorites
                     </h1>
                     <div className="text-lg text-gray-700 text-center">
                         <Loading 
@@ -51,7 +51,7 @@ const PopularPage = () => {
                     <Loading 
                         isLoading={loading}
                         error={error}
-                        mainText={"Loading popular recipes..."}
+                        mainText={"Loading your favorite recipes..."}
                         subText={"Please wait a moment!"}
                         loadingType={"big"}
                         errorComp={ <span className="text-red-500 font-semibold"> {error} </span> }
@@ -63,4 +63,4 @@ const PopularPage = () => {
     );
 };
 
-export default PopularPage;
+export default FavoritesPage;

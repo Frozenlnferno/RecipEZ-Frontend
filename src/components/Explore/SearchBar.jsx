@@ -6,7 +6,7 @@ const SearchBar = ({ handleSearch }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (searchQuery.trim() !== "") {
-            console.log(searchQuery);
+            console.log("Search Query: ", searchQuery);
             handleSearch(searchQuery);
         }
     };

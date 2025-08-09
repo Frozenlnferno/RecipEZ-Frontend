@@ -7,21 +7,21 @@ const env = import.meta.env
 
 const LoginPage = () => {
     const navigate = useNavigate();
-    const handleLogin = async (email, password, setError) => {
+    const handleLogin = async (inputEmail, inputPassword, setError) => {
         try {
             const res = await fetch(`${env.VITE_SERVER_ORIGIN}/auth/login`, {
                 method: "post",
                 headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ inputEmail, inputPassword })
             });
 
             // Checks if login was successful
             const user = await res.json();
-            console.log(user);
             if (!user.email) {
                 setError("Invalid username or password!");
                 return false;
             }
+            console.log(user);
 
             //Logs in if successful
             setError("");

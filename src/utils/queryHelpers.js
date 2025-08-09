@@ -2,7 +2,7 @@
 const buildURL = (query, filters) => {
     const params = new URLSearchParams();
     if (query) params.append('query', query);
-    if (filters.type) params.append('type', filters.type);
+    if (filters.type) { params.append('type', filters.type) };
     if (filters.cuisine && filters.cuisine.length)
         filters.cuisine.forEach(c => params.append('cuisine', c));
     if (filters.diet && filters.diet.length)
@@ -13,9 +13,8 @@ const buildURL = (query, filters) => {
     return params.toString();
 };
 
-const parse = (search, ) => {
+const parse = (search) => {
     const params = new URLSearchParams(search);
-
     // For single-value filters
     const query = params.get("query") || "";
     const type = params.get("type") || "";
@@ -29,9 +28,24 @@ const parse = (search, ) => {
     return { query, type, cuisine, diet, intolerances, maxReadyTime };
 };
 
+const buildAPIURL = (query, filters) => {
+    const params = new URLSearchParams();
+    if (query) params.append('query', query);
+    if (filters.type) { params.append('type', filters.type) };
+    if (filters.cuisine && filters.cuisine.length)
+        filters.cuisine.forEach(c => params.append('cuisine', c));
+    if (filters.diet && filters.diet.length)
+        filters.diet.forEach(d => params.append('diet', d));
+    if (filters.intolerances && filters.intolerances.length)
+        filters.intolerances.forEach(i => params.append('intolerances', i));
+    if (filters.maxReadyTime) params.append('maxReadyTime', filters.maxReadyTime);
+    return params.toString();
+};
+
 const queryHelpers = {
     buildURL,
-    parse
+    parse,
+    buildAPIURL
 }
 
 export default queryHelpers;

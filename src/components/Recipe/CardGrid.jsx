@@ -1,5 +1,6 @@
 import RecipeCard from "./RecipeCard";
 
+// recipeList must have title, image, and id properties
 const CardGrid = ({ recipeList }) => {
     return (
         <div className="grid place-items-center [grid-template-columns:repeat(auto-fill,minmax(180px,1fr))] gap-y-5">
