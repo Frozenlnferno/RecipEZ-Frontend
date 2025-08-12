@@ -1,19 +1,19 @@
 import { useState } from 'react';
- 
-const SearchBar = ({ handleSearch }) => {
+import { useLocation } from 'react-router-dom';
+import queryHelpers from '../../utils/queryHelpers'; 
+
+const SearchBar = ({ handleSearch, onFilterClick }) => {
+    const location = useLocation();
     const [searchQuery, setSearchQuery] = useState("");
+    const [filters, setFilters] = useState(queryHelpers.parse(location.search));
     
     const handleSubmit = (e) => {
         e.preventDefault();
         if (searchQuery.trim() !== "") {
             console.log("Search Query: ", searchQuery);
-            handleSearch(searchQuery);
+            handleSearch(searchQuery, filters);
         }
     };
-
-    const onFilterClick = () => {
-
-    }
 
     return (
         <form onSubmit={handleSubmit} className="w-full max-w-2xl flex flex-col sm:flex-row items-center gap-4 py-2 px-2 ">

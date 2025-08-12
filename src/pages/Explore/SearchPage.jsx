@@ -13,6 +13,12 @@ const SearchPage = () => {
     const [popular, setPopular] = useState([]);
     const [popularIsLoading, setPopularIsLoading] = useState(true);
     const [popularError, setPopularError] = useState(null);
+    const [favorites, setFavorites] = useState([]);
+    const [favoritesIsLoading, setFavoritesIsLoading] = useState(true);
+    const [favoritesError, setFavoritesError] = useState(null);
+    const [recommended, setRecommended] = useState([]);
+    const [recommendedIsLoading, setRecommendedIsLoading] = useState(true);
+    const [recommendedError, setRecommendedError] = useState(null);
 
     const [filters, setFilters] = useState({
         type: "",            // string or array for meal type
@@ -36,7 +42,38 @@ const SearchPage = () => {
                 setPopularIsLoading(false);
             }
         }
+
+        const getFavorites = async () => {
+            try {
+                const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
+                if (!response.ok) { throw new Error("Failed to fetch from API") }
+                const data = await response.json();
+                console.log(data);
+                setFavorites(data);
+            } catch (err) {
+                setFavoritesError(`Failed to get favorite recipes. ${err}`);
+            } finally {
+                setFavoritesIsLoading(false);
+            }
+        }
+
+        const getRecommended = async () => {
+            try {
+                const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
+                if (!response.ok) { throw new Error("Failed to fetch from API") }
+                const data = await response.json();
+                console.log(data);
+                setRecommended(data);
+            } catch (err) {
+                setRecommendedError(`Failed to get recommended recipes. ${err}`);
+            } finally {
+                setRecommendedIsLoading(false);
+            }
+        }
+
         getPopular();
+        getFavorites();
+        getRecommended();
     }, [])
 
     const handleSearch = (query) => {
@@ -77,16 +114,16 @@ const SearchPage = () => {
                     </div>
                     <div className="bg-white p-5 rounded-lg shadow-xl">
                         <Loading 
-                            isLoading={popularIsLoading}
-                            error={popularError}
+                            isLoading={favoritesIsLoading}
+                            error={favoritesError}
                             mainText={"Loading your favorite recipes..."}
                             subText={"Please wait a moment!"}
                             loadingType={"big"}
-                            errorComp={ <span className="text-red-500 font-semibold"> {popularError} </span> }
+                            errorComp={ <span className="text-red-500 font-semibold"> {favoritesError} </span> }
                             loadedComp={ 
                                 <RecipeSection 
                                     title="⭐Favorites"
-                                    recipeList={popular.recipes}
+                                    recipeList={favorites.recipes}
                                     seeAllAddress="/favorites" 
                                 /> 
                             }
@@ -94,16 +131,16 @@ const SearchPage = () => {
                     </div>
                     <div className="bg-white p-5 rounded-lg shadow-xl">
                         <Loading 
-                            isLoading={popularIsLoading}
-                            error={popularError}
+                            isLoading={recommendedIsLoading}
+                            error={recommendedError}
                             mainText={"Finding recipes you might like..."}
                             subText={"Please wait a moment!"}
                             loadingType={"big"}
-                            errorComp={ <span className="text-red-500 font-semibold"> {popularError} </span> }
+                            errorComp={ <span className="text-red-500 font-semibold"> {recommendedError} </span> }
                             loadedComp={ 
                                 <RecipeSection 
                                     title="💡Recommended"
-                                    recipeList={popular.recipes}
+                                    recipeList={recommended .recipes}
                                     seeAllAddress="/recommended" 
                                 /> 
                             }

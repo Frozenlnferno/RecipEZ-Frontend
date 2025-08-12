@@ -6,35 +6,41 @@ import SearchBar from "../../components/Explore/SearchBar.jsx";
 import queryHelpers from "../../utils/queryHelpers.js";
 import CardGrid from "../../components/Recipe/CardGrid.jsx";
 import Loading from "../../components/loading/Loading.jsx";
+import FiltersModal from "../../components/modals/FiltersModal.jsx";
+
+const env = import.meta.env
 
 const ResultsPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [filters, setFilters] = useState(queryHelpers.parse(location.search));
-    const [recipes, setRecipes] = useState([
-        {
-            title: "Food1",
-            img: "null",
-            id: 1
-        },
-        {
-            title: "Food2",
-            img: "null",
-            id: 2
-        }
-    ]);
+    const [recipes, setRecipes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showFiltersModal, setShowFiltersModal] = useState(true);
 
+    // When results page first displays, all the useEffect fires on mount 
+
+    // When the parameter changes, but not address, parse the parameters and update filter 
     useEffect(() => {
-        const updateFilter = async () => {
+        setFilters(queryHelpers.parse(location.search));
+    }, [location.search])
+
+    // Once filter update, call API for new recipes and update recipes
+    useEffect(() => {
+        const updateRecipes = async () => {
             setIsLoading(true);
             setError(null);
             try {
-                const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
+                const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/search_recipe`, {
+                    method: "post",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({filters})
+                });
                 if (!response.ok) { throw new Error("Failed to fetch from API") }
                 const data = await response.json();
-                setRecipes(data[0]);
+
+                setRecipes(data);
                 setIsLoading(false);
             } catch (err) {
                 setIsLoading(true);
@@ -43,24 +49,28 @@ const ResultsPage = () => {
                 setIsLoading(false);
             }
         }
+        updateRecipes();
+    }, [filters]);
 
-        setFilters(queryHelpers.parse(location.search));
-        console.log(filters);
-        updateFilter();
-    }, [location.search]);
-
-    const handleSearch = (query) => {
-        const qs = queryHelpers.buildURL(query, filters);
-        console.log(query, " ", qs);
+    // Search function for searchbar
+    const handleSearch = (newQuery, newFilters) => {
+        const qs = queryHelpers.buildURL(newQuery, newFilters);
         navigate(`/results?${qs}`);
+    }
+
+    const handleClose = () => {
+        setShowFiltersModal(!showFiltersModal);
     }
 
     return (
         <>
             <Navbar />
             <div className="pt-16 min-h-screen flex items-center flex-col w-full">
+                { showFiltersModal &&
+                    <FiltersModal handleClose={handleClose}/> 
+                }
                 <div className="m-4">
-                    <SearchBar handleSearch={handleSearch}/>
+                    <SearchBar handleSearch={handleSearch} onFilterClick={handleClose}/>
                 </div>
                 <div className="p-5 lg:px-20 md:px-10 sm:px-5 shadow-md font-semibold w-full">
                     <p> Search results for "{filters.query}" </p>
