@@ -10,14 +10,13 @@ import FiltersModal from "../../components/modals/FiltersModal.jsx";
 
 const env = import.meta.env
 
-const ResultsPage = () => {
+const ResultsPage = ({ filters, setFilters}) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [filters, setFilters] = useState(queryHelpers.parse(location.search));
     const [recipes, setRecipes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [showFiltersModal, setShowFiltersModal] = useState(true);
+    const [showFiltersModal, setShowFiltersModal] = useState(false);
 
     // When results page first displays, all the useEffect fires on mount 
 
@@ -58,7 +57,7 @@ const ResultsPage = () => {
         navigate(`/results?${qs}`);
     }
 
-    const handleClose = () => {
+    const toggleFilter = () => {
         setShowFiltersModal(!showFiltersModal);
     }
 
@@ -67,10 +66,10 @@ const ResultsPage = () => {
             <Navbar />
             <div className="pt-16 min-h-screen flex items-center flex-col w-full">
                 { showFiltersModal &&
-                    <FiltersModal handleClose={handleClose}/> 
+                    <FiltersModal handleClose={toggleFilter}/> 
                 }
                 <div className="m-4">
-                    <SearchBar handleSearch={handleSearch} onFilterClick={handleClose}/>
+                    <SearchBar handleSearch={handleSearch} onFilterClick={toggleFilter}/>
                 </div>
                 <div className="p-5 lg:px-20 md:px-10 sm:px-5 shadow-md font-semibold w-full">
                     <p> Search results for "{filters.query}" </p>

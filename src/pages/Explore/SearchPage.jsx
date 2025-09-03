@@ -6,8 +6,9 @@ import SearchBar from "../../components/Explore/SearchBar.jsx";
 import RecipeSection from "../../components/Recipe/RecipeSection.jsx";
 import queryHelpers from "../../utils/queryHelpers.js";
 import Loading from "../../components/loading/Loading.jsx";
+import FiltersModal from "../../components/modals/FiltersModal.jsx";
 
-const SearchPage = () => {
+const SearchPage = ({ filters, setFilters}) => {
     const navigate = useNavigate();
 
     const [popular, setPopular] = useState([]);
@@ -19,14 +20,7 @@ const SearchPage = () => {
     const [recommended, setRecommended] = useState([]);
     const [recommendedIsLoading, setRecommendedIsLoading] = useState(true);
     const [recommendedError, setRecommendedError] = useState(null);
-
-    const [filters, setFilters] = useState({
-        type: "",            // string or array for meal type
-        cuisine: [],         // array for multiple cuisines
-        diet: [],            // array for multiple diets
-        intolerances: [],    // array for intolerances
-        maxReadyTime: 0,     // number (minutes)
-    });
+    const [showFiltersModal, setShowFiltersModal] = useState(false);
     
     useEffect(() => {
         const getPopular = async () => {
@@ -82,16 +76,23 @@ const SearchPage = () => {
         navigate(`/results?${qs}`);
     }
     
+    const toggleFilter = () => {
+        setShowFiltersModal(!showFiltersModal);
+    }
+
     return (
         <>
             <Navbar />
             <div className="pt-16 flex flex-col items-center min-h-screen w-full bg-gray-100">
+                { showFiltersModal &&
+                    <FiltersModal handleClose={toggleFilter}/> 
+                }
                 <div className="flex flex-col items-center shadow-lg p-10 gap-y-5 w-full bg-white">  
                     <h1 className="text-2xl font-bold"> 
                         Search for your next favorite recipe!
                     </h1>
                     <p> Use our AI assisted search to find your favorite recipes! </p>
-                    <SearchBar handleSearch={handleSearch}/>
+                    <SearchBar handleSearch={handleSearch} onFilterClick={toggleFilter}/>
                 </div>
                 
                 <div className="flex flex-col p-10 gap-y-8 w-full">

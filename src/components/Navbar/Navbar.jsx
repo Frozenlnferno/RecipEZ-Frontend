@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+
 import MenuLinks from "./MenuLinks";
 import logo from '../../assets/recipez-logo.png';
+import UserContext from "../../context/UserContext";
 
-const Navbar = ({ loggedIn }) => {
+const Navbar = () => {
     const [showMenu, setShowMenu] = useState(false);
+    
 
     return (
         <nav className="fixed top-0 left-0 w-full z-50 bg-green-800 shadow-lg border-b border-green-700">
@@ -20,7 +23,7 @@ const Navbar = ({ loggedIn }) => {
 
                     {/* Options */}
                     <ul className="hidden md:flex space-x-8 text-white font-medium">
-                        <MenuLinks loggedIn={loggedIn} setShowMenu={setShowMenu}/>
+                        <MenuLinks setShowMenu={setShowMenu}/>
                     </ul>
 
                     {/* Menu Button*/}
@@ -37,7 +40,7 @@ const Navbar = ({ loggedIn }) => {
                 <div className={`md:hidden transition-all duration-300 ${showMenu ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                     <div className="bg-green-800 border-t border-green-900">
                         <ul className="flex flex-col space-y-2 px-4 py-3 text-white font-medium">
-                            <MenuLinks loggedIn={loggedIn} setShowMenu={setShowMenu}/>
+                            <MenuLinks setShowMenu={setShowMenu}/>
                         </ul>
                     </div>
                 </div>

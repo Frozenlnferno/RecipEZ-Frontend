@@ -4,7 +4,7 @@ import Navbar from "../../components/Navbar/Navbar.jsx";
 const LandingPage = () => {
     return (
         <> 
-            <Navbar />
+            <Navbar loggedIn={true}/>
             <div className="pt-16 bg-gradient-to-br from-orange-50 via-green-50 to-white flex flex-col min-h-screen">
                 {/* Hero Section */}
                 <header className="flex flex-col justify-center items-center px-6 min-h-screen text-center bg-gradient-to-b from-white via-green-100 to-green-200 shadow-lg">
