@@ -5,6 +5,7 @@ import CardGrid from "../../components/Recipe/CardGrid.jsx";
 import Loading from "../../components/loading/Loading.jsx";
 
 import { UserContext } from "../../context/UserContext.jsx";
+const env = import.meta.env;
 
 const FavoritesPage = () => {
     const { user } = useContext(UserContext);
@@ -18,7 +19,7 @@ const FavoritesPage = () => {
             setError(null);
             try {
                 if (user) {
-                    const response = await fetch("http://localhost:3001/api/get_random_recipes/2");
+                    const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/2`);
                     if (!response.ok) { throw new Error("Failed to fetch recipes"); }
                     const data = await response.json();
                     setRecipeList(Array.isArray(data.recipes) ? data.recipes : []);

@@ -10,6 +10,8 @@ import FiltersModal from "../../components/modals/FiltersModal.jsx";
 
 import { UserContext } from "../../context/UserContext.jsx";
 
+const env = import.meta.env;
+
 const SearchPage = ({ filters, setFilters}) => {
     const navigate = useNavigate();
     const { user } = useContext(UserContext);
@@ -28,7 +30,7 @@ const SearchPage = ({ filters, setFilters}) => {
     useEffect(() => {
         const getPopular = async () => {
             try {
-                const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
+                const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/5`);
                 if (!response.ok) { throw new Error("Failed to fetch from API") }
                 const data = await response.json();
                 console.log(data);
@@ -43,7 +45,7 @@ const SearchPage = ({ filters, setFilters}) => {
         const getFavorites = async () => {
             try {
                 if (user) {
-                    const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
+                    const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/5`);
                     if (!response.ok) { throw new Error("Failed to fetch from API") }
                     const data = await response.json();
                     console.log(data);
@@ -59,7 +61,7 @@ const SearchPage = ({ filters, setFilters}) => {
         const getRecommended = async () => {
             try {
                 if (user) {
-                    const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
+                    const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/5`);
                     if (!response.ok) { throw new Error("Failed to fetch from API") }
                     const data = await response.json();
                     console.log(data);

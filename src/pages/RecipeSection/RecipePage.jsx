@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar/Navbar";
 import RecipeInfo from "../../components/Recipe/RecipeInfo";
 
+const env = import.meta.env;
+
 const RecipePage = () => {
     const { id } = useParams();
     const [recipe, setRecipe] = useState({});
@@ -13,7 +15,7 @@ const RecipePage = () => {
     useEffect(() => {
         const getRecipe = async () => {
             try {   
-                const response = await fetch(`http://localhost:3001/api/get_recipe/${id}`)
+                const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_recipe/${id}`)
                 if (!response.ok) { throw new Error("Failed to fetch")}
                 const data = await response.json();
                 console.log(data);
