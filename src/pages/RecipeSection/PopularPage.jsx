@@ -14,7 +14,7 @@ const PopularPage = () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
+                const response = await fetch("http://localhost:3001/api/get_random_recipes/2");
                 if (!response.ok) { throw new Error("Failed to fetch recipes"); }
                 const data = await response.json();
                 setRecipeList(Array.isArray(data.recipes) ? data.recipes : []);

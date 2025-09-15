@@ -1,13 +1,11 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import MenuLinks from "./MenuLinks";
 import logo from '../../assets/recipez-logo.png';
-import UserContext from "../../context/UserContext";
 
 const Navbar = () => {
     const [showMenu, setShowMenu] = useState(false);
-    
 
     return (
         <nav className="fixed top-0 left-0 w-full z-50 bg-green-800 shadow-lg border-b border-green-700">

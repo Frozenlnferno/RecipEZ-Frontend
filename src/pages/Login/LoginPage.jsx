@@ -1,12 +1,16 @@
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
 
 import Navbar from '../../components/Navbar/Navbar.jsx';
 import Login from '../../components/auth/Login.jsx';
+import { UserContext } from '../../context/UserContext.jsx';
 
 const env = import.meta.env
 
 const LoginPage = () => {
     const navigate = useNavigate();
+    const { user, setUser } = useContext(UserContext);
+
     const handleLogin = async (inputEmail, inputPassword, setError) => {
         try {
             const res = await fetch(`${env.VITE_SERVER_ORIGIN}/auth/login`, {
@@ -16,14 +20,14 @@ const LoginPage = () => {
             });
 
             // Checks if login was successful
-            const user = await res.json();
-            if (!user.email) {
+            const loggedin_user = await res.json();
+            if (!loggedin_user.id) {
                 setError("Invalid username or password!");
                 return false;
             }
-            console.log(user);
 
             //Logs in if successful
+            setUser(loggedin_user);
             setError("");
             navigate("/search");
             return true;
@@ -31,6 +35,8 @@ const LoginPage = () => {
             setError("Internal server error.");
             console.log("Error: ", err);
             return false;
+        } finally {
+            console.log("Current User: ", user);
         }
     }
     

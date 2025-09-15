@@ -1,12 +1,13 @@
-# React + Vite
+Recipez – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Recipez is a responsive web application that helps users discover, explore, and save recipes. Built with React, the app allows users to search for recipes by name or ingredients, filter by meal type, cuisine, diet, and preparation time, and view detailed instructions including ingredients, steps, and nutrition information.
 
-Currently, two official plugins are available:
+Users can also save their favorite recipes for easy access and browse popular recipes curated from the API. The frontend is designed to be mobile-friendly and works seamlessly across devices.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Key Features:
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Search recipes by name or ingredients
+- Filter by type, cuisine, diet, intolerances, and ready time
+- View detailed recipe pages (ingredients, steps, nutrition)
+- Save favorite recipes
+- Responsive UI

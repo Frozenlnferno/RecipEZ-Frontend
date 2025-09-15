@@ -1,10 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import Navbar from "../../components/Navbar/Navbar.jsx";
 import CardGrid from "../../components/Recipe/CardGrid.jsx";
 import Loading from "../../components/loading/Loading.jsx";
 
+import { UserContext } from "../../context/UserContext.jsx";
+
 const FavoritesPage = () => {
+    const { user } = useContext(UserContext);
     const [recipeList, setRecipeList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -14,10 +17,12 @@ const FavoritesPage = () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
-                if (!response.ok) { throw new Error("Failed to fetch recipes"); }
-                const data = await response.json();
-                setRecipeList(Array.isArray(data.recipes) ? data.recipes : []);
+                if (user) {
+                    const response = await fetch("http://localhost:3001/api/get_random_recipes/2");
+                    if (!response.ok) { throw new Error("Failed to fetch recipes"); }
+                    const data = await response.json();
+                    setRecipeList(Array.isArray(data.recipes) ? data.recipes : []);
+                }
             } catch (err) {
                 setError(`Could not load recipes. ${err}`);
             } finally {
@@ -43,7 +48,11 @@ const FavoritesPage = () => {
                             subText={""}
                             loadingType={"small"}
                             errorComp={ <div className="text-red-500 font-semibold"> {error} </div> }
-                            loadedComp={ <div className="text-orange-600 font-semibold"> {recipeList.length} recipes shown </div> }
+                            loadedComp={ 
+                                <div className="text-orange-600 font-semibold"> 
+                                    {user ? recipeList.length : "0"} recipes shown 
+                                </div> 
+                            }
                         />
                     </div>
                 </header>
@@ -55,7 +64,12 @@ const FavoritesPage = () => {
                         subText={"Please wait a moment!"}
                         loadingType={"big"}
                         errorComp={ <span className="text-red-500 font-semibold"> {error} </span> }
-                        loadedComp={ <CardGrid recipeList={recipeList} /> }
+                        loadedComp={ 
+                            user ? 
+                                <CardGrid recipeList={recipeList} /> 
+                            : 
+                                <div> You must login to view favorited recipes. </div>
+                        }
                     />
                 </main>
             </div>

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import Navbar from "../../components/Navbar/Navbar.jsx";
 import SearchBar from "../../components/Explore/SearchBar.jsx";
@@ -8,8 +8,11 @@ import queryHelpers from "../../utils/queryHelpers.js";
 import Loading from "../../components/loading/Loading.jsx";
 import FiltersModal from "../../components/modals/FiltersModal.jsx";
 
+import { UserContext } from "../../context/UserContext.jsx";
+
 const SearchPage = ({ filters, setFilters}) => {
     const navigate = useNavigate();
+    const { user } = useContext(UserContext);
 
     const [popular, setPopular] = useState([]);
     const [popularIsLoading, setPopularIsLoading] = useState(true);
@@ -39,11 +42,13 @@ const SearchPage = ({ filters, setFilters}) => {
 
         const getFavorites = async () => {
             try {
-                const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
-                if (!response.ok) { throw new Error("Failed to fetch from API") }
-                const data = await response.json();
-                console.log(data);
-                setFavorites(data);
+                if (user) {
+                    const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
+                    if (!response.ok) { throw new Error("Failed to fetch from API") }
+                    const data = await response.json();
+                    console.log(data);
+                    setFavorites(data);
+                }
             } catch (err) {
                 setFavoritesError(`Failed to get favorite recipes. ${err}`);
             } finally {
@@ -53,11 +58,13 @@ const SearchPage = ({ filters, setFilters}) => {
 
         const getRecommended = async () => {
             try {
-                const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
-                if (!response.ok) { throw new Error("Failed to fetch from API") }
-                const data = await response.json();
-                console.log(data);
-                setRecommended(data);
+                if (user) {
+                    const response = await fetch("http://localhost:3001/api/get_random_recipes/5");
+                    if (!response.ok) { throw new Error("Failed to fetch from API") }
+                    const data = await response.json();
+                    console.log(data);
+                    setRecommended(data);
+                }
             } catch (err) {
                 setRecommendedError(`Failed to get recommended recipes. ${err}`);
             } finally {
@@ -88,9 +95,14 @@ const SearchPage = ({ filters, setFilters}) => {
                     <FiltersModal handleClose={toggleFilter}/> 
                 }
                 <div className="flex flex-col items-center shadow-lg p-10 gap-y-5 w-full bg-white">  
-                    <h1 className="text-2xl font-bold"> 
+                    {user && 
+                        <h1 className="text-2xl font-bold"> 
+                            {`Hey ${user.name}!`}
+                        </h1>
+                    }
+                    <h2 className="text-2xl font-bold"> 
                         Search for your next favorite recipe!
-                    </h1>
+                    </h2>
                     <p> Use our AI assisted search to find your favorite recipes! </p>
                     <SearchBar handleSearch={handleSearch} onFilterClick={toggleFilter}/>
                 </div>
@@ -122,11 +134,21 @@ const SearchPage = ({ filters, setFilters}) => {
                             loadingType={"big"}
                             errorComp={ <span className="text-red-500 font-semibold"> {favoritesError} </span> }
                             loadedComp={ 
-                                <RecipeSection 
-                                    title="⭐Favorites"
-                                    recipeList={favorites.recipes}
-                                    seeAllAddress="/favorites" 
-                                /> 
+                                user ? 
+                                    <RecipeSection 
+                                        title="⭐Favorites"
+                                        recipeList={favorites.recipes}
+                                        seeAllAddress="/favorites" 
+                                    /> 
+                                :
+                                    <div className="flex flex-col gap-y-4">
+                                        <div className="flex justify-between items-center">
+                                            <p className="text-xl font-bold">
+                                                ⭐Favorites
+                                            </p>
+                                        </div>
+                                        <div className="py-4"> You must login to use this feature </div>
+                                    </div>
                             }
                         />
                     </div>
@@ -139,11 +161,21 @@ const SearchPage = ({ filters, setFilters}) => {
                             loadingType={"big"}
                             errorComp={ <span className="text-red-500 font-semibold"> {recommendedError} </span> }
                             loadedComp={ 
-                                <RecipeSection 
-                                    title="💡Recommended"
-                                    recipeList={recommended .recipes}
-                                    seeAllAddress="/recommended" 
-                                /> 
+                                user ? 
+                                    <RecipeSection 
+                                        title="💡Recommended"
+                                        recipeList={recommended.recipes}
+                                        seeAllAddress="/recommended" 
+                                    /> 
+                                :
+                                    <div className="flex flex-col gap-y-4">
+                                        <div className="flex justify-between items-center">
+                                            <p className="text-xl font-bold">
+                                                💡Recommended
+                                            </p>
+                                        </div>
+                                        <div className="py-4"> You must login to use this feature </div>
+                                    </div>
                             }
                         />
                     </div>

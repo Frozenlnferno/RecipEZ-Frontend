@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
-import UserContext from "../../context/UserContext";
+import { UserContext } from "../../context/UserContext";
 
 const MenuLinks = ({ setShowMenu }) => {
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
 
     return (
         <>
@@ -17,7 +17,17 @@ const MenuLinks = ({ setShowMenu }) => {
             }
             {user &&
                 <>
-                    <li><Link to="/login" className="highlight" onClick={() => setShowMenu(false)}> Log Out </Link></li>
+                    <li>
+                        <Link to="/login" className="highlight" 
+                            onClick={() => {
+                                    setShowMenu(false);
+                                    setUser(null);
+                                    console.log("Log ", user, " out");
+                                }
+                            }> 
+                                Log Out 
+                        </Link>
+                    </li>
                     <li><Link to="/settings" className="highlight" onClick={() => setShowMenu(false)}> Settings </Link></li>
                 </>
             }
