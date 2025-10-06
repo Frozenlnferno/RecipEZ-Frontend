@@ -19,10 +19,17 @@ const FavoritesPage = () => {
             setError(null);
             try {
                 if (user) {
-                    const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/2`);
+                    const response = await fetch(`${env.VITE_SERVER_ORIGIN}/db/get_favorites`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ id: user.id })
+                    });
+
                     if (!response.ok) { throw new Error("Failed to fetch recipes"); }
                     const data = await response.json();
-                    setRecipeList(Array.isArray(data.recipes) ? data.recipes : []);
+                    setRecipeList(Array.isArray(data) ? data : []);
                 }
             } catch (err) {
                 setError(`Could not load recipes. ${err}`);

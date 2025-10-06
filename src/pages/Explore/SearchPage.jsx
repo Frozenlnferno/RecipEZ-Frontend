@@ -14,14 +14,11 @@ const env = import.meta.env;
 
 const SearchPage = ({ filters, setFilters}) => {
     const navigate = useNavigate();
-    const { user } = useContext(UserContext);
+    const { user, favorites, favoritesLoading, favoritesError } = useContext(UserContext);
 
     const [popular, setPopular] = useState([]);
     const [popularIsLoading, setPopularIsLoading] = useState(true);
     const [popularError, setPopularError] = useState(null);
-    const [favorites, setFavorites] = useState([]);
-    const [favoritesIsLoading, setFavoritesIsLoading] = useState(true);
-    const [favoritesError, setFavoritesError] = useState(null);
     const [recommended, setRecommended] = useState([]);
     const [recommendedIsLoading, setRecommendedIsLoading] = useState(true);
     const [recommendedError, setRecommendedError] = useState(null);
@@ -42,22 +39,6 @@ const SearchPage = ({ filters, setFilters}) => {
             }
         }
 
-        const getFavorites = async () => {
-            try {
-                if (user) {
-                    const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/5`);
-                    if (!response.ok) { throw new Error("Failed to fetch from API") }
-                    const data = await response.json();
-                    console.log(data);
-                    setFavorites(data);
-                }
-            } catch (err) {
-                setFavoritesError(`Failed to get favorite recipes. ${err}`);
-            } finally {
-                setFavoritesIsLoading(false);
-            }
-        }
-
         const getRecommended = async () => {
             try {
                 if (user) {
@@ -73,11 +54,10 @@ const SearchPage = ({ filters, setFilters}) => {
                 setRecommendedIsLoading(false);
             }
         }
-
         getPopular();
-        getFavorites();
         getRecommended();
-    }, [])
+        // re-run when user changes so recommended/popular can be refreshed after login
+    }, [user])
 
     const handleSearch = (query) => {
         const qs = queryHelpers.buildURL(query, filters);
@@ -94,7 +74,7 @@ const SearchPage = ({ filters, setFilters}) => {
             <Navbar />
             <div className="pt-16 flex flex-col items-center min-h-screen w-full bg-gray-100">
                 { showFiltersModal &&
-                    <FiltersModal handleClose={toggleFilter}/> 
+                    <FiltersModal handleClose={toggleFilter} filters={filters} setFilters={setFilters}/> 
                 }
                 <div className="flex flex-col items-center shadow-lg p-10 gap-y-5 w-full bg-white">  
                     {user && 
@@ -129,7 +109,7 @@ const SearchPage = ({ filters, setFilters}) => {
                     </div>
                     <div className="bg-white p-5 rounded-lg shadow-xl">
                         <Loading 
-                            isLoading={favoritesIsLoading}
+                            isLoading={favoritesLoading}
                             error={favoritesError}
                             mainText={"Loading your favorite recipes..."}
                             subText={"Please wait a moment!"}
@@ -137,11 +117,20 @@ const SearchPage = ({ filters, setFilters}) => {
                             errorComp={ <span className="text-red-500 font-semibold"> {favoritesError} </span> }
                             loadedComp={ 
                                 user ? 
-                                    <RecipeSection 
-                                        title="⭐Favorites"
-                                        recipeList={favorites.recipes}
-                                        seeAllAddress="/favorites" 
-                                    /> 
+                                    (favorites && favorites.length > 0 ? (
+                                        <RecipeSection 
+                                            title="⭐Favorites"
+                                            recipeList={favorites.map(f => ({ title: f.recipe_title || f.title, image: f.recipe_image || f.image, id: f.id }))}
+                                            seeAllAddress="/favorites" 
+                                        />
+                                    ) : (
+                                        <div className="flex flex-col gap-y-4">
+                                            <div className="flex justify-between items-center">
+                                                <p className="text-xl font-bold">⭐Favorites</p>
+                                            </div>
+                                            <div className="py-4 text-gray-600">You don't have any favorites yet. Click the heart on a recipe to add it to your favorites.</div>
+                                        </div>
+                                    ))
                                 :
                                     <div className="flex flex-col gap-y-4">
                                         <div className="flex justify-between items-center">

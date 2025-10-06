@@ -66,7 +66,7 @@ const ResultsPage = ({ filters, setFilters}) => {
             <Navbar />
             <div className="pt-16 min-h-screen flex items-center flex-col w-full">
                 { showFiltersModal &&
-                    <FiltersModal handleClose={toggleFilter}/> 
+                    <FiltersModal handleClose={toggleFilter} filters={filters} setFilters={setFilters}/> 
                 }
                 <div className="m-4">
                     <SearchBar handleSearch={handleSearch} onFilterClick={toggleFilter}/>
