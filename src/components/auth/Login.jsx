@@ -16,7 +16,7 @@ const Login = ({ handleLogin }) => {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center flex-col bg-gradient-to-br from-green-50 via-green-100 to-green-200">
+        <div className="flex min-h-screen items-center justify-center flex-col bg-gradient-to-br from-green-50 via-green-100 to-green-200 px-3">
             <form
                 onSubmit={handleSubmit}
                 className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md border border-green-100"

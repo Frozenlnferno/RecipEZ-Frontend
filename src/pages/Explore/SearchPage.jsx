@@ -27,10 +27,9 @@ const SearchPage = ({ filters, setFilters}) => {
     useEffect(() => {
         const getPopular = async () => {
             try {
-                const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/5`);
+                const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/7`);
                 if (!response.ok) { throw new Error("Failed to fetch from API") }
                 const data = await response.json();
-                console.log(data);
                 setPopular(data);
             } catch (err) {
                 setPopularError(`Failed to get popular recipes. ${err}`);
@@ -42,10 +41,9 @@ const SearchPage = ({ filters, setFilters}) => {
         const getRecommended = async () => {
             try {
                 if (user) {
-                    const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/5`);
+                    const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/3`);
                     if (!response.ok) { throw new Error("Failed to fetch from API") }
                     const data = await response.json();
-                    console.log(data);
                     setRecommended(data);
                 }
             } catch (err) {
@@ -76,7 +74,7 @@ const SearchPage = ({ filters, setFilters}) => {
                 { showFiltersModal &&
                     <FiltersModal handleClose={toggleFilter} filters={filters} setFilters={setFilters}/> 
                 }
-                <div className="flex flex-col items-center shadow-lg p-10 gap-y-5 w-full bg-white">  
+                <div className="flex flex-col items-center shadow-lg p-6 md:p-10 gap-y-5 w-full bg-white">  
                     {user && 
                         <h1 className="text-2xl font-bold"> 
                             {`Hey ${user.name}!`}
@@ -85,11 +83,11 @@ const SearchPage = ({ filters, setFilters}) => {
                     <h2 className="text-2xl font-bold"> 
                         Search for your next favorite recipe!
                     </h2>
-                    <p> Use our AI assisted search to find your favorite recipes! </p>
+                    <p> Use our smart filters to discover recipes you’ll love. </p>
                     <SearchBar handleSearch={handleSearch} onFilterClick={toggleFilter}/>
                 </div>
                 
-                <div className="flex flex-col p-10 gap-y-8 w-full">
+                <div className="flex flex-col p-4 md:p-8 lg:p-12 gap-y-8 w-full">
                     <div className="bg-white p-5 rounded-lg shadow-xl">
                         <Loading 
                             isLoading={popularIsLoading}

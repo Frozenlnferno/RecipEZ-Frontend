@@ -18,7 +18,6 @@ const RecipePage = () => {
                 const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_recipe/${id}`)
                 if (!response.ok) { throw new Error("Failed to fetch")}
                 const data = await response.json();
-                console.log(data);
                 setRecipe(data);
             } catch (err) {
                 setError(`Failed to load recipe. Reason: ${err}`)
@@ -32,7 +31,7 @@ const RecipePage = () => {
     return(
         <>
             <Navbar />
-            <div className="p-16 min-h-screen flex items-center justify-center">
+            <div className="pt-16 px-1 min-h-screen flex items-center justify-center">
                 {isLoading ? (
                     <div className="flex flex-col items-center justify-center h-48 animate-pulse">
                         <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-green-300 via-green-100 to-green-200 flex items-center justify-center mb-4 shadow-lg">

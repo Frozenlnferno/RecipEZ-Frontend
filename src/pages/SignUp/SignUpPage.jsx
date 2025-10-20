@@ -8,43 +8,50 @@ import { UserContext } from '../../context/UserContext.jsx';
 const env = import.meta.env;
 
 const SignUpPage = () => {
-    const navigate = useNavigate();
-    const { setUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
-    const handleSignUp = async (email, name, password, setError) => {
-        try {
-            const res = await fetch(`${env.VITE_SERVER_ORIGIN}/auth/signup`, {
-                method: 'post',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ email, name, password })
-            });
+  const handleSignUp = async (email, name, password, setError) => {
+    try {
+      const res = await fetch(`${env.VITE_SERVER_ORIGIN}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name, password })
+      });
 
-            // Checks if new user is valid
-            const newUser = await res.json();
-            if (!newUser.id) {
-                setError("An account with this email already exists.");
-                return false;
-            }
-            
-            setUser(newUser);
-            setError("");
-            navigate("/search");
-            return true;
-        } catch (err) {
-            setError("Server error. Please try again.");
-            console.log("Error: ", err);
-            return false;
-        }
+      const data = await res.json();
+
+      // Backend should respond with { token, user: { id, name, email } }
+      if (!res.ok || !data.token || !data.user) {
+        setError(data.error || "An account with this email may already exist.");
+        return false;
+      }
+
+      // ✅ Save token and user
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // ✅ Update context
+      setUser(data.user);
+
+      setError("");
+      navigate("/search");
+      return true;
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError("Server error. Please try again.");
+      return false;
     }
+  };
 
-    return (
-        <>
-            <Navbar />
-            <div className="pt-16">
-                <SignUp handleSignUp={handleSignUp}/>
-            </div>
-        </>
-    );
-}
+  return (
+    <>
+      <Navbar />
+      <div className="pt-16">
+        <SignUp handleSignUp={handleSignUp} />
+      </div>
+    </>
+  );
+};
 
 export default SignUpPage;

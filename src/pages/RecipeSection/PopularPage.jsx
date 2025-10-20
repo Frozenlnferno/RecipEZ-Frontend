@@ -16,7 +16,7 @@ const PopularPage = () => {
             setLoading(true);
             setError(null);
             try {
-                const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/2`);
+                const response = await fetch(`${env.VITE_SERVER_ORIGIN}/api/get_random_recipes/10`);
                 if (!response.ok) { throw new Error("Failed to fetch recipes"); }
                 const data = await response.json();
                 setRecipeList(Array.isArray(data.recipes) ? data.recipes : []);

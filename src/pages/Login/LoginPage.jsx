@@ -14,31 +14,38 @@ const LoginPage = () => {
     const handleLogin = async (inputEmail, inputPassword, setError) => {
         try {
             const res = await fetch(`${env.VITE_SERVER_ORIGIN}/auth/login`, {
-                method: "post",
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ inputEmail, inputPassword })
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: inputEmail, password: inputPassword }) // match backend keys
             });
 
-            // Checks if login was successful
-            const loggedin_user = await res.json();
-            if (!loggedin_user.id) {
-                setError("Invalid username or password!");
+            const data = await res.json();
+
+            // Handle invalid credentials or missing token
+            if (!res.ok || !data.token) {
+                setError(data.error || "Invalid email or password!");
                 return false;
             }
 
-            //Logs in if successful
-            setUser(loggedin_user);
+            // ✅ Store token and user info locally
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+
+            // ✅ Update context state
+            setUser(data.user);
+
             setError("");
             navigate("/search");
             return true;
         } catch (err) {
             setError("Internal server error.");
-            console.log("Error: ", err);
+            console.error("Login error:", err);
             return false;
         } finally {
-            console.log("Current User: ", user);
+            console.log("Current User:", user);
         }
-    }
+    };
+
     
     return (
         <>
